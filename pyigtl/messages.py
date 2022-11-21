@@ -789,4 +789,5 @@ message_type_to_class_constructor = {
         "IMAGE": ImageMessage,
         "STRING": StringMessage,
         "POINT": PointMessage,
+        "POLYDATA": PolyDataMessage,
     }
