@@ -908,7 +908,7 @@ class SensorMessage(MessageBase):
         self._valid_message = True
 
     def content_asstring(self):
-        s = 'Sensor:'
+        s = 'Sensor: ' + self.unit.content_asstring()
         return s
 
     def _pack_content(self):

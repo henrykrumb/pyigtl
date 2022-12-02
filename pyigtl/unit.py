@@ -183,3 +183,10 @@ class SensorUnit:
             unit.append(u)
             exp.append(e)
         return SensorUnit(unit, prefix, exp)
+
+    def content_asstring(self):
+        s = str(self.prefix)
+        for i in range(len(self.unit)):
+            s += ', '
+            s += f'1e{self.exp[i]} {self.unit[i]}'
+        return s
