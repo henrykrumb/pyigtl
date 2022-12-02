@@ -898,6 +898,32 @@ class PositionMessage(MessageBase):
 
 
 
+class SensorMessage(MessageBase):
+    def __init__(self, status=None, unit=None, data=None, timestamp=None, device_name=None):
+        MessageBase.__init__(self, timestamp=timestamp, device_name=device_name)
+        self._message_type = "SENSOR"
+        self.data = data
+        self.status = status
+        self.unit = unit
+        self._valid_message = True
+
+    def content_asstring(self):
+        s = 'Sensor:'
+        return s
+
+    def _pack_content(self):
+        binary_content = struct.pack('> B', len(self.data))
+        binary_content += struct.pack('> B', self.status)
+        binary_content += self.unit.pack()
+        binary_content += struct.pack(f'> {len(self.data)}f', self.data)
+        return binary_content
+
+    def _unpack_content(self, content):
+        
+        unit = SensorUnit.unpack(sensor_content)
+        self.unit = unit
+
+
 # http://slicer-devel.65872.n3.nabble.com/OpenIGTLinkIF-and-CRC-td4031360.html
 CRC64 = crcmod.mkCrcFun(0x142F0E1EBA9EA3693, rev=False, initCrc=0x0000000000000000, xorOut=0x0000000000000000)
 
@@ -931,9 +957,10 @@ def _igtl_frac_to_nanosec(frac):
 
 
 message_type_to_class_constructor = {
-        "TRANSFORM": TransformMessage,
-        "IMAGE": ImageMessage,
-        "STRING": StringMessage,
-        "POINT": PointMessage,
-        "POSITION": PositionMessage,
-    }
+    "TRANSFORM": TransformMessage,
+    "IMAGE": ImageMessage,
+    "STRING": StringMessage,
+    "POINT": PointMessage,
+    "POSITION": PositionMessage,
+    "SENSOR": SensorMessage,
+}
